@@ -1,13 +1,18 @@
 // React code starts here
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
+const Index = require('./components/Index');
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <h1>Top 10 Around The World</h1>
-      </div>
+      <Router>
+        <div>
+          <Route path="/" component={Index} />
+        </div>
+      </Router>
     )
   }
 }
