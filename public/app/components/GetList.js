@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
+const DisplayList = require('./DisplayList');
+
 class GetList extends Component {
   constructor() {
     super();
@@ -35,12 +37,16 @@ class GetList extends Component {
         <h3>{tracks["@attr"].country}</h3>
         {tracks.track.map((trk, i) => {
           return (
-            <div key={i}>
-              <p>{i+1} {trk.name}</p>
-            </div>
-          )
-        })
-      }
+            <DisplayList
+              key={i+1}
+              trackName={trk.name}
+              artistName={trk.artist.name}
+              artistUrl={trk.artist.url}
+              imageArr={trk.image}
+              rank={i+1} />
+            )
+          })
+        }
       </div>
     )
   }
