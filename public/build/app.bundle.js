@@ -23376,7 +23376,7 @@ module.exports = function hoistNonReactStatics(targetComponent, sourceComponent,
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23412,7 +23412,6 @@ var Index = function (_Component) {
   _createClass(Index, [{
     key: 'render',
     value: function render() {
-      console.log(process.env);
       return _react2.default.createElement(
         'div',
         null,
@@ -23430,7 +23429,6 @@ var Index = function (_Component) {
 }(_react.Component);
 
 module.exports = Index;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 76 */
@@ -23463,20 +23461,63 @@ var GetList = function (_Component) {
   function GetList() {
     _classCallCheck(this, GetList);
 
-    return _possibleConstructorReturn(this, (GetList.__proto__ || Object.getPrototypeOf(GetList)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (GetList.__proto__ || Object.getPrototypeOf(GetList)).call(this));
+
+    _this.state = {
+      listData: {}
+    };
+    return _this;
   }
 
   _createClass(GetList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.loadList();
+    }
+  }, {
+    key: 'loadList',
+    value: function loadList() {
+      var _this2 = this;
+
+      fetch('/api/v1/lists/' + this.props.match.params.country).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        _this2.setState({
+          listData: data
+        });
+      }).catch(function (err) {
+        console.error(err);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      if (Object.keys(this.state.listData).length < 1) {
+        return null;
+      };
+      var tracks = this.state.listData.tracks;
+
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'h3',
           null,
-          'Country List Goes Here'
-        )
+          tracks["@attr"].country
+        ),
+        tracks.track.map(function (trk, i) {
+          return _react2.default.createElement(
+            'div',
+            { key: i },
+            _react2.default.createElement(
+              'p',
+              null,
+              i + 1,
+              ' ',
+              trk.name
+            )
+          );
+        })
       );
     }
   }]);

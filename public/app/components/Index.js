@@ -6,7 +6,6 @@ const GetList = require('./GetList');
 
 class Index extends Component {
   render() {
-    console.log(process.env);
     return (
       <div>
         <h1>Top 10 Around The World</h1>
