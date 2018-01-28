@@ -23421,7 +23421,7 @@ var Index = function (_Component) {
           null,
           'Top 10 Around The World'
         ),
-        _react2.default.createElement(_reactRouterDom.Route, { path: '/:country', component: GetList })
+        _react2.default.createElement(_reactRouterDom.Route, { path: '/list/:country', component: GetList })
       );
     }
   }]);

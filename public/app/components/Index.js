@@ -10,7 +10,7 @@ class Index extends Component {
     return (
       <div>
         <h1>Top 10 Around The World</h1>
-        <Route path="/:country" component={GetList} />
+        <Route path="/list/:country" component={GetList} />
       </div>
     )
   }
