@@ -13,11 +13,17 @@ class GetList extends Component {
   }
 
   componentDidMount() {
-    this.loadList();
+    this.loadList(this.props.match.params.country);
   }
 
-  loadList() {
-    fetch(`/api/v1/lists/${this.props.match.params.country}`)
+  componentWillUpdate(nextProps, nextState) {
+    if(nextProps.match.params.country != this.props.match.params.country) {
+      this.loadList(nextProps.match.params.country);
+    }
+  }
+
+  loadList(country) {
+    fetch(`/api/v1/lists/${country}`)
       .then(res => res.json())
       .then(data => {
         this.setState({
