@@ -8,20 +8,18 @@ const Index = require('./components/Index');
 class App extends Component {
   render() {
     return (
-      <Router>
-        <div>
-          <Route path="/" component={Index} />
-        </div>
-      </Router>
+      <div>
+        <Route path="/" component={Index} />
+      </div>
     )
   }
 }
 
 ReactDOM.render(
   (
-    <div>
+    <Router>
       <App />
-    </div>
+    </Router>
   ),
   document.getElementById('app')
 );
