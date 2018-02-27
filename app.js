@@ -11,6 +11,7 @@ var knex = require('knex');
 
 var index = require('./routes/index');
 var getList = require('./routes/getList');
+var getCountries = require('./routes/getCountries');
 
 var ENV = process.env.NODE_ENV || 'development';
 var dbConfig = require('./knexfile');
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/', index);
+app.use('/api/v1/countries', getCountries);
 app.use('/api/v1/lists', getList);
 app.use('/*', index);
 

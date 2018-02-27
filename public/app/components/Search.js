@@ -7,8 +7,20 @@ class Search extends Component {
     super();
 
     this.state = {
+      countries: {},
       search: ''
     }
+  }
+
+  componentDidMount() {
+    fetch('/api/v1/countries')
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          countries: data
+        })
+      })
+      .catch(err => console.error(err));
   }
 
   handleOnChange(event) {
@@ -29,8 +41,8 @@ class Search extends Component {
   }
 
   render() {
-    var { search } = this.state;
-    var { sendSearchValue } = this.props;
+    var { countries, search } = this.state;
+    var { sendSearchValue } = this.props;    
 
     return (
       <div>

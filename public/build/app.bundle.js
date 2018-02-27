@@ -23466,12 +23466,28 @@ var Search = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Search.__proto__ || Object.getPrototypeOf(Search)).call(this));
 
     _this.state = {
+      countries: {},
       search: ''
     };
     return _this;
   }
 
   _createClass(Search, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      fetch('/api/v1/countries').then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        _this2.setState({
+          countries: data
+        });
+      }).catch(function (err) {
+        return console.error(err);
+      });
+    }
+  }, {
     key: 'handleOnChange',
     value: function handleOnChange(event) {
       var target = event.target;
@@ -23491,9 +23507,11 @@ var Search = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
-      var search = this.state.search;
+      var _state = this.state,
+          countries = _state.countries,
+          search = _state.search;
       var sendSearchValue = this.props.sendSearchValue;
 
 
@@ -23505,12 +23523,12 @@ var Search = function (_Component) {
           name: 'search',
           value: search,
           onChange: function onChange(e) {
-            return _this2.handleOnChange(e);
+            return _this3.handleOnChange(e);
           } }),
         _react2.default.createElement(
           'div',
           { onClick: function onClick() {
-              return _this2.goToList(search);
+              return _this3.goToList(search);
             } },
           search
         )
