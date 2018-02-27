@@ -7,9 +7,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var knex = require('knex');
 
 var index = require('./routes/index');
 var getList = require('./routes/getList');
+
+var ENV = process.env.NODE_ENV || 'development';
+var dbConfig = require('./knexfile');
+var db = knex(dbConfig[ENV]);
 
 var app = express();
 
@@ -47,5 +52,16 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// migrate latest db models
+app.up = () => {
+  return db.migrate.latest([ENV])
+    .then(() => {
+      return db.migrate.currentVersion();
+    })
+    .then((val) => {
+      console.log('Done running latest migration:', val);
+    });
+  }
 
 module.exports = app;
