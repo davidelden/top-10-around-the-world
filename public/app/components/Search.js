@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { withRouter } from 'react-router-dom'
+import Fuse from 'fuse.js'
 
 class Search extends Component {
   constructor() {
@@ -8,7 +9,7 @@ class Search extends Component {
 
     this.state = {
       countries: {},
-      search: ''
+      searchResults: []
     }
   }
 
@@ -23,38 +24,60 @@ class Search extends Component {
       .catch(err => console.error(err));
   }
 
-  handleOnChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+  searchOnChange(event) {
+    const value = event.target.value;
 
     this.setState({
-      [name]: value
-    })
+      searchResults: this.searchResults(value)
+    });
   }
 
   goToList(country) {
     this.props.history.push(`/list/${country}`);
+    this.clearSearchInput();
+    this.clearSearchResults();
+  }
+
+  clearSearchInput() {
+    document.getElementById('country-search').value = '';
+  }
+
+  clearSearchResults() {
     this.setState({
-      search: ''
+      searchResults: []
     })
   }
 
-  render() {
-    var { countries, search } = this.state;
-    var { sendSearchValue } = this.props;    
+  searchResults(searchInput) {
+    let fuseOptions = {
+      keys: ['name'],
+      id: 'name',
+      threshold: 0.2
+    };
+    let fuse = new Fuse(this.state.countries, fuseOptions);
+    return fuse.search(searchInput);
+  }
 
+  render() {
+    var { countries, searchResults } = this.state;
+    var { sendSearchValue } = this.props;
     return (
       <div>
-        <input 
+        <input
+          id="country-search"
           type="text"
           name="search"
-          value={search}
-          onChange = {e => this.handleOnChange(e)} />
+          onChange = {e => this.searchOnChange(e)} />
 
-        <div onClick={() => this.goToList(search)}>
-          {search}
-        </div>
+        {searchResults.length > 0 ?
+          searchResults.map((country, i) => {
+            if(i < 5) {
+              return(
+                <div key={i} onClick={() => this.goToList(country)}>{country}</div>
+              )
+            }
+          })
+        : null}
       </div>
     )
   }
