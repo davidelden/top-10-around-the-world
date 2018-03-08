@@ -24695,6 +24695,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var DisplayList = __webpack_require__(79);
+var ListNoTrackData = __webpack_require__(80);
+var ListErr = __webpack_require__(81);
 
 var GetList = function (_Component) {
   _inherits(GetList, _Component);
@@ -24740,10 +24742,18 @@ var GetList = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      if (Object.keys(this.state.listData).length < 1) {
+      var country = this.props.match.params.country;
+      var objKeys = Object.keys(this.state.listData);
+
+      if (objKeys.length < 1) {
         return null;
       };
-      var tracks = this.state.listData.tracks;
+      if (objKeys.includes('tracks')) {
+        var tracks = this.state.listData.tracks;
+      }
+      if (objKeys.includes('error')) {
+        var error = this.state.listData.error;
+      }
 
       return _react2.default.createElement(
         'div',
@@ -24751,9 +24761,9 @@ var GetList = function (_Component) {
         _react2.default.createElement(
           'h3',
           null,
-          tracks["@attr"].country
+          country
         ),
-        tracks.track.map(function (trk, i) {
+        tracks && tracks.track.length > 0 ? tracks.track.map(function (trk, i) {
           return _react2.default.createElement(DisplayList, {
             key: i + 1,
             trackName: trk.name,
@@ -24761,7 +24771,9 @@ var GetList = function (_Component) {
             artistUrl: trk.artist.url,
             imageArr: trk.image,
             rank: i + 1 });
-        })
+        }) : null,
+        tracks && tracks.track.length == 0 ? _react2.default.createElement(ListNoTrackData, null) : null,
+        error ? _react2.default.createElement(ListErr, { errCode: error }) : null
       );
     }
   }]);
@@ -24851,6 +24863,134 @@ DisplayList.propTypes = {
 };
 
 module.exports = DisplayList;
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(8);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ListNoTrackData = function (_Component) {
+  _inherits(ListNoTrackData, _Component);
+
+  function ListNoTrackData() {
+    _classCallCheck(this, ListNoTrackData);
+
+    return _possibleConstructorReturn(this, (ListNoTrackData.__proto__ || Object.getPrototypeOf(ListNoTrackData)).apply(this, arguments));
+  }
+
+  _createClass(ListNoTrackData, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'p',
+          null,
+          'This country currently has no Top 10 list to display.'
+        )
+      );
+    }
+  }]);
+
+  return ListNoTrackData;
+}(_react.Component);
+
+module.exports = ListNoTrackData;
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(8);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__(3);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ListErr = function (_Component) {
+  _inherits(ListErr, _Component);
+
+  function ListErr() {
+    _classCallCheck(this, ListErr);
+
+    return _possibleConstructorReturn(this, (ListErr.__proto__ || Object.getPrototypeOf(ListErr)).apply(this, arguments));
+  }
+
+  _createClass(ListErr, [{
+    key: 'errMessage',
+    value: function errMessage() {
+      switch (this.props.errCode) {
+        case 6:
+          return 'Country name is invalid. Please search again.';
+          break;
+        default:
+          return 'An error occurred. Error code: ' + this.props.errCode;
+          break;
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'p',
+          null,
+          this.errMessage()
+        )
+      );
+    }
+  }]);
+
+  return ListErr;
+}(_react.Component);
+
+ListErr.propTypes = {
+  errCode: _propTypes2.default.number
+};
+
+module.exports = ListErr;
 
 /***/ })
 /******/ ]);

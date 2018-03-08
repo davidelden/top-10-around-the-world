@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
 const DisplayList = require('./DisplayList');
+const ListNoTrackData = require('./ListNoTrackData');
+const ListErr = require('./ListErr');
 
 class GetList extends Component {
   constructor() {
@@ -36,23 +38,35 @@ class GetList extends Component {
   }
 
   render() {
-    if(Object.keys(this.state.listData).length < 1) { return null };
-    let { tracks } = this.state.listData;
+    let country = this.props.match.params.country;
+    let objKeys = Object.keys(this.state.listData);
+
+    if(objKeys.length < 1) { return null };
+    if(objKeys.includes('tracks')) {
+      var { tracks } = this.state.listData;
+    }
+    if(objKeys.includes('error')) {
+      var { error } = this.state.listData;
+    }
+
     return (
       <div>
-        <h3>{tracks["@attr"].country}</h3>
-        {tracks.track.map((trk, i) => {
-          return (
-            <DisplayList
-              key={i+1}
-              trackName={trk.name}
-              artistName={trk.artist.name}
-              artistUrl={trk.artist.url}
-              imageArr={trk.image}
-              rank={i+1} />
-            )
-          })
-        }
+        <h3>{country}</h3>
+        {tracks && tracks.track.length > 0 ?
+          tracks.track.map((trk, i) => {
+            return (
+              <DisplayList
+                key={i+1}
+                trackName={trk.name}
+                artistName={trk.artist.name}
+                artistUrl={trk.artist.url}
+                imageArr={trk.image}
+                rank={i+1} />
+              )
+            })
+        : null}
+        {tracks && tracks.track.length == 0 ? <ListNoTrackData /> : null}
+        {error ? <ListErr errCode={error} /> : null}
       </div>
     )
   }
